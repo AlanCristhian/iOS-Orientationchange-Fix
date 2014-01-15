@@ -3,12 +3,28 @@
  MIT / GPLv2 License.
 */
 (function(w){
-	
 	// This fix addresses an iOS bug, so return early if the UA claims it's something else.
+
+    function iOSVersion() {
+        var match = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/),
+            version = [
+                parseInt(match[1], 10),
+                parseInt(match[2], 10),
+                parseInt(match[3] || 0, 10)
+            ];
+
+        return parseFloat(version.join('.'));
+    }
+
+    function is_apple_so() {
+        return (/iPhone|iPad|iPod/.test( navigator.platform ) && /OS [1-5]_[0-9_]* like Mac OS X/i.test(ua) && ua.indexOf( "AppleWebKit" ) > -1 )
+    }
+
 	var ua = navigator.userAgent;
-	if( !( /iPhone|iPad|iPod/.test( navigator.platform ) && /OS [1-5]_[0-9_]* like Mac OS X/i.test(ua) && ua.indexOf( "AppleWebKit" ) > -1 ) ){
-		return;
-	}
+
+	if (!is_apple_so && iOSVersion < 6.0) {
+        return;
+    }
 
     var doc = w.document;
 
